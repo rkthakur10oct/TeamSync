@@ -50,8 +50,9 @@ INSTALLED_APPS = [
     # Local Apps
     "accounts",
     "teams",
-    "chat",
-    "uploads",
+    "team_messages",
+    "media_files",
+    "notifications",
 ]
 
 MIDDLEWARE = [
@@ -153,3 +154,5 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
 }
+
+DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
