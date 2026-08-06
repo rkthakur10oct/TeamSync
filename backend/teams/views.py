@@ -17,3 +17,10 @@ class TeamListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
+        
+class TeamDetailView(generics.RetrieveUpdateDestroyAPIView):
+    serializer_class = TeamSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Team.objects.filter(created_by=self.request.user)        
