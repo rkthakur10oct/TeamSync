@@ -1,10 +1,7 @@
-from django.shortcuts import render
-
-# Create your views here.
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
-from .models import Team
+from .models import Team, TeamMember
 from .serializers import TeamSerializer
 
 
@@ -16,11 +13,18 @@ class TeamListCreateView(generics.ListCreateAPIView):
         return Team.objects.filter(created_by=self.request.user)
 
     def perform_create(self, serializer):
-        serializer.save(created_by=self.request.user)
-        
+        team = serializer.save(created_by=self.request.user)
+
+        TeamMember.objects.create(
+            team=team,
+            user=self.request.user,
+            role=TeamMember.Role.OWNER,
+        )
+
+
 class TeamDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TeamSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Team.objects.filter(created_by=self.request.user)        
+        return Team.objects.filter(created_by=self.request.user)
