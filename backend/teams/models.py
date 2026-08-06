@@ -1,10 +1,19 @@
 from django.db import models
 from django.conf import settings
 
+import uuid
+
 
 class Team(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
+    
+    
+    join_code = models.UUIDField(
+        default=uuid.uuid4,
+        unique=True,
+        editable=False,
+    )
 
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,

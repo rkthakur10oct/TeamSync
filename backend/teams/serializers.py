@@ -11,6 +11,7 @@ class TeamSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
+            "join_code",
             "created_by",
             "created_at",
             "updated_at",

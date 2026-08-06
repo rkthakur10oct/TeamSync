@@ -4,6 +4,11 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Team, TeamMember
 from .serializers import TeamSerializer
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.core.exceptions import ValidationError
+
 
 class TeamListCreateView(generics.ListCreateAPIView):
     serializer_class = TeamSerializer
@@ -28,3 +33,44 @@ class TeamDetailView(generics.RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return Team.objects.filter(created_by=self.request.user)
+    
+
+class JoinTeamView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        join_code = request.data.get("join_code")
+
+        if not join_code:
+            return Response(
+                {"error": "join_code is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        try:
+            team = Team.objects.get(join_code=join_code)
+        except (Team.DoesNotExist, ValidationError, ValueError):
+            return Response(
+                {"error": "Invalid join code"},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+
+        member, created = TeamMember.objects.get_or_create(
+            team=team,
+            user=request.user,
+            defaults={"role": TeamMember.Role.MEMBER},
+        )
+
+        if not created:
+            return Response(
+                {"message": "You are already a member"},
+                status=status.HTTP_200_OK,
+            )
+
+        return Response(
+            {
+                "message": "Successfully joined the team",
+                "team": team.name,
+            },
+            status=status.HTTP_201_CREATED,
+        )
