@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     "media_files",
     "notifications",
     "tasks",
+    "dashboard",
     
 ]
 
