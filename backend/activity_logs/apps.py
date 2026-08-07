@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class MediaFilesConfig(AppConfig):
+class ActivityLogsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'media_files'
+    name = 'activity_logs'

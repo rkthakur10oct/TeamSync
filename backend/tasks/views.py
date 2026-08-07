@@ -7,6 +7,9 @@ from django.db.models import Q
 from notifications.models import Notification
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from activity_logs.utils import create_activity
+from activity_logs.models import ActivityLog
+
 
 class TaskListCreateView(generics.ListCreateAPIView):
     serializer_class = TaskSerializer
@@ -64,7 +67,14 @@ class TaskListCreateView(generics.ListCreateAPIView):
                message=f'You have been assigned the task "{task.title}".',
                notification_type=Notification.Type.TASK_ASSIGNED,
             )
-
+        
+        # Activity Log
+        create_activity(
+            user=self.request.user,
+            action=ActivityLog.Action.CREATED,
+            target=task.title,
+        )
+        
 
 class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TaskSerializer
@@ -87,4 +97,20 @@ class TaskDetailView(generics.RetrieveUpdateDestroyAPIView):
                 notification_type=Notification.Type.TASK_UPDATED,
             )    
             
-            
+        create_activity(
+            user=self.request.user,
+            action=ActivityLog.Action.UPDATED,
+            target=task.title,
+        )    
+        
+        
+    def perform_destroy(self, instance):
+        title = instance.title
+
+        create_activity(
+            user=self.request.user,
+            action=ActivityLog.Action.DELETED,
+            target=title,
+        )
+
+        instance.delete()    

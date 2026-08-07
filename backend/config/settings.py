@@ -52,12 +52,12 @@ INSTALLED_APPS = [
     "accounts",
     "teams",
     "team_messages",
-    "media_files",
     "notifications",
     "tasks",
     "dashboard",
     "attachments",
     "reports",
+    "activity_logs",
     
     
 ]
