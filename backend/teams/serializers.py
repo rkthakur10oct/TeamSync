@@ -16,3 +16,18 @@ class TeamSerializer(serializers.ModelSerializer):
             "created_at",
             "updated_at",
         ]
+        
+from .models import TeamMember
+
+
+class TeamMemberSerializer(serializers.ModelSerializer):
+    username = serializers.ReadOnlyField(source="user.username")
+
+    class Meta:
+        model = TeamMember
+        fields = [
+            "id",
+            "username",
+            "role",
+            "joined_at",
+        ]        

@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 
 from .models import Team, TeamMember
-from .serializers import TeamSerializer
+from .serializers import TeamSerializer, TeamMemberSerializer
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -74,3 +74,15 @@ class JoinTeamView(APIView):
             },
             status=status.HTTP_201_CREATED,
         )
+        
+        
+class TeamMembersView(generics.ListAPIView):
+    serializer_class = TeamMemberSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        team_id = self.kwargs["team_id"]
+
+        return TeamMember.objects.filter(
+            team_id=team_id
+        ).select_related("user")        
