@@ -1,7 +1,12 @@
 # Python
 __pycache__/
 *.py[cod]
+
+# Database
 *.sqlite3
+
+# Media
+backend/media/
 
 # Virtual Environment
 venv/

@@ -8,6 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.core.exceptions import ValidationError
+from permissions.team_permissions import IsOwnerOrReadOnly
 
 
 class TeamListCreateView(generics.ListCreateAPIView):
@@ -29,7 +30,10 @@ class TeamListCreateView(generics.ListCreateAPIView):
 
 class TeamDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TeamSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [
+    IsAuthenticated,
+    IsOwnerOrReadOnly,
+]
 
     def get_queryset(self):
         return Team.objects.filter(created_by=self.request.user)
