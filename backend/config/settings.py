@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     # Third Party Apps
     "rest_framework",
     "rest_framework_simplejwt",
+    "django_filters",
 
     # Local Apps
     "accounts",
@@ -57,6 +58,7 @@ INSTALLED_APPS = [
     "dashboard",
     "attachments",
     "reports",
+    
     
 ]
 
@@ -158,6 +160,11 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
+        "rest_framework.filters.OrderingFilter",
+    ],
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
