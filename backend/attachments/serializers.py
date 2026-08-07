@@ -14,3 +14,9 @@ class AttachmentSerializer(serializers.ModelSerializer):
             "file",
             "uploaded_at",
         ]
+
+        read_only_fields = [
+            "task",
+            "uploaded_by",
+            "uploaded_at",
+        ]
