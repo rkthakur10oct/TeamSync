@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     "notifications",
     "tasks",
     "dashboard",
+    "attachments",
     
 ]
 
@@ -159,3 +160,7 @@ REST_FRAMEWORK = {
 }
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"

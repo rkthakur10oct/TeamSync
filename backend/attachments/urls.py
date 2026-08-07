@@ -1,0 +1,19 @@
+from django.urls import path
+
+from .views import (
+    AttachmentListCreateView,
+    AttachmentDeleteView,
+)
+
+urlpatterns = [
+    path(
+        "task/<int:task_id>/",
+        AttachmentListCreateView.as_view(),
+        name="attachment-list",
+    ),
+    path(
+        "<int:pk>/",
+        AttachmentDeleteView.as_view(),
+        name="attachment-delete",
+    ),
+]
