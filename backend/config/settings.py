@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     "team_messages",
     "media_files",
     "notifications",
+    "tasks",
 ]
 
 MIDDLEWARE = [
