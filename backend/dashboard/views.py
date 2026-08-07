@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from teams.models import Team
 from tasks.models import Task
 from notifications.models import Notification
+from django.utils import timezone
 
 
 class DashboardView(APIView):
@@ -25,7 +26,7 @@ class DashboardView(APIView):
             status=Task.Status.TODO,
         ).count()
 
-        in_progress = Task.objects.filter(
+        in_progress_tasks = Task.objects.filter(
             created_by=request.user,
             status=Task.Status.IN_PROGRESS,
         ).count()
@@ -39,12 +40,19 @@ class DashboardView(APIView):
             user=request.user,
             is_read=False,
         ).count()
+        
+        overdue_tasks = Task.objects.filter(
+            created_by=request.user,
+            status=Task.Status.TODO,
+            due_date__lt=timezone.now().date(),
+        ).count()
 
         return Response({
             "total_teams": total_teams,
             "total_tasks": total_tasks,
             "todo_tasks": todo_tasks,
-            "in_progress_tasks": in_progress,
+            "in_progress_tasks": in_progress_tasks,
             "completed_tasks": done_tasks,
             "unread_notifications": unread_notifications,
+            "overdue_tasks": overdue_tasks,
         })
